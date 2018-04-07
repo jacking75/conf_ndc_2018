@@ -1,6 +1,6 @@
-//클라이언트 관리를 채널 별로 나누어서 처리. - distribute 라는 함수를 고루틴으로 동작시키고, 내부에서 채널을 통해서 메시지를 받는다.   
-//클라이언트 접속, 클라이언트 접속 해제, 클라이언트에게 메시지 보내기 채널을 나눈다. 
-//고루틴은 handle, distribute(메시지 보내기 채널을 호출하는 고루틴이 있음)    
+//클라이언트 관리를 채널 별로 나누어서 처리. - distribute 라는 함수를 고루틴으로 동작시키고, 내부에서 채널을 통해서 메시지를 받는다.
+//클라이언트 접속, 클라이언트 접속 해제, 클라이언트에게 메시지 보내기 채널을 나눈다.
+//고루틴은 handle, distribute(메시지 보내기 채널을 호출하는 고루틴이 있음)
 package main
 
 import (
@@ -64,7 +64,7 @@ func distribute(addclient <-chan Client, deleteclient <-chan Client, msgchan <-c
 }
 
 func main() {
-	port := ":8080"
+	port := ":32452"
 	if len(os.Args) > 1 {
 		port = ":" + os.Args[1]
 	}
