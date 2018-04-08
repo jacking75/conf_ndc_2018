@@ -65,13 +65,17 @@ func distribute(addclient <-chan Client, deleteclient <-chan Client, msgchan <-c
 
 func main() {
 	port := ":32452"
+
 	if len(os.Args) > 1 {
 		port = ":" + os.Args[1]
 	}
+
 	ln, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	fmt.Println("Server Listen. port: ", port)
 
 	addclient := make(chan Client)
 	deleteclient := make(chan Client)

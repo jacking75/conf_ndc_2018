@@ -14,12 +14,15 @@ func main() {
 		println("need request parameter")
 		os.Exit(1)
 	}
+
 	echo_contents := os.Args[1]
+	
 	tcp_addr, err := net.ResolveTCPAddr("tcp", "localhost:6666")
 	if err != nil {
 		println("error tcp resolve failed", err.Error())
 		os.Exit(1)
 	}
+	
 	tcp_conn, err := net.DialTCP("tcp", nil, tcp_addr)
 	SendEcho(tcp_conn, echo_contents)
 
