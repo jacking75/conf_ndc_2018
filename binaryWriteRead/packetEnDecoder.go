@@ -125,12 +125,12 @@ func (p *rawPacketDataSt) ReadByte() (ret byte, err error) {
 	return
 }
 
-func (p *rawPacketDataSt) ReadBytes() (ret []byte, err error) {
+func (p *rawPacketDataSt) ReadBytes(size int16) (ret []byte, err error) {
 	if p.pos+2 > len(p.data) {
 		err = errors.New("read bytes header failed")
 		return
 	}
-	size, _ := p.ReadU16()
+
 	if p.pos+int(size) > len(p.data) {
 		err = errors.New("read bytes data failed")
 		return
@@ -140,6 +140,24 @@ func (p *rawPacketDataSt) ReadBytes() (ret []byte, err error) {
 	p.pos += int(size)
 	return
 }
+
+/*func (p *rawPacketDataSt) ReadBytes(readByte int16) (ret []byte, err error) {
+	if p.pos+2 > len(p.data) {
+		err = errors.New("read bytes header failed")
+		return
+	}
+
+	size, _ = p.ReadS16()
+
+	if p.pos+int(size) > len(p.data) {
+		err = errors.New("read bytes data failed")
+		return
+	}
+
+	ret = p.data[p.pos : p.pos+int(size)]
+	p.pos += int(size)
+	return
+}*/
 
 func (p *rawPacketDataSt) ReadString() (ret string, err error) {
 	if p.pos+2 > len(p.data) {
@@ -199,8 +217,9 @@ func (p *rawPacketDataSt) WriteS16(v int16) {
 	p.WriteU16(uint16(v))
 }
 
-func (p *rawPacketDataSt) WriteBytes(v []byte) {
+func (p *rawPacketDataSt) WriteBytes(v []byte, size int16) {
 	copy(p.data[p.pos:], v)
+	p.pos += (int)(size)
 }
 
 func (p *rawPacketDataSt) WriteU32(v uint32) {

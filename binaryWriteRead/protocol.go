@@ -1,19 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"reflect"
 )
 
 type Header struct {
 	TotalSize int16
-	Id        int16
+	PktId     int16
 }
 
 type Login struct {
-	header Header
-	Id     [16]byte
-	Pw     [16]byte
+	Header
+	Id [16]byte
+	Pw [16]byte
 }
 
 var HeaderSizeROnly = protocolInitHeaderSize()
@@ -27,13 +26,13 @@ func protocolInitHeaderSize() int16 {
 func sizeof(t reflect.Type) int {
 	switch t.Kind() {
 	case reflect.Array:
-		fmt.Println("reflect.Array")
+		//fmt.Println("reflect.Array")
 		if s := sizeof(t.Elem()); s >= 0 {
 			return s * t.Len()
 		}
 
 	case reflect.Struct:
-		fmt.Println("reflect.Struct")
+		//fmt.Println("reflect.Struct")
 		sum := 0
 		for i, n := 0, t.NumField(); i < n; i++ {
 			s := sizeof(t.Field(i).Type)
