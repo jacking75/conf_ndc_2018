@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"net"
 	"os"
 )
@@ -10,21 +12,31 @@ const (
 )
 
 func main() {
-	if len(os.Args) == 1 {
-		println("need request parameter")
+
+	var msg string
+	var port int
+
+	flag.IntVar(&port, "p", 32452, "port")
+	flag.StringVar(&msg, "m", "", "send message")
+	flag.Parse()
+
+	if len(msg) == 0 {
+		println("send message is empty")
 		os.Exit(1)
 	}
 
-	echo_contents := os.Args[1]
-	
-	tcp_addr, err := net.ResolveTCPAddr("tcp", "localhost:6666")
+	tcp_addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("localhost:%d", port))
 	if err != nil {
 		println("error tcp resolve failed", err.Error())
 		os.Exit(1)
 	}
-	
+
 	tcp_conn, err := net.DialTCP("tcp", nil, tcp_addr)
-	SendEcho(tcp_conn, echo_contents)
+	if err != nil {
+		println("error tcp conn failed", err.Error())
+		os.Exit(1)
+	}
+	SendEcho(tcp_conn, msg)
 
 	echo := GetEcho(tcp_conn)
 	println("echo: ", string(echo))
@@ -50,4 +62,3 @@ func GetEcho(conn *net.TCPConn) string {
 	}
 	return string(buf_recever)
 }
-  
